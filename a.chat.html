@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.SNOOKER - Royal Edition</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;color:#fff;font-family:Arial,sans-serif;text-align:center;
+ background:radial-gradient(ellipse at top,#315b49,#101c20 55%,#080c12);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.page{display:none;min-height:100vh;padding:22px 12px}
+.page.active{display:flex;align-items:center;justify-content:center;flex-direction:column}
+.panel{
+ width:min(950px,97vw);padding:30px 22px;
+ border:1px solid #e8c77e;border-radius:25px;
+ background:linear-gradient(145deg,#17372e,#101921);
+ box-shadow:0 0 30px #d9a94c55,0 20px 65px #000b;
+}
+.logo{
+ font-size:clamp(45px,10vw,90px);font-weight:1000;
+ letter-spacing:5px;color:#fff0be;
+ text-shadow:0 0 5px white,0 0 15px #ffd36d,0 0 35px #ff9d35,0 0 65px #e7a43e;
+ animation:shine 2s infinite alternate;
+}
+@keyframes shine{to{filter:brightness(1.5)}}
+.tagline{color:#e9c681;letter-spacing:5px;font-size:12px;margin-top:12px}
+.art{width:min(780px,100%);margin:25px auto;border:2px solid #b88a48;border-radius:18px;overflow:hidden}
+.art svg{width:100%;display:block}
+.gold-btn{
+ padding:14px 35px;border:1px solid #fff0bd;border-radius:35px;
+ background:linear-gradient(110deg,#80501d,#ffe39a,#a66a2d);
+ color:#251707;font-weight:900;letter-spacing:2px;
+ box-shadow:0 0 22px #ffcf6d77;
+}
+.gold-btn:hover{filter:brightness(1.2);transform:translateY(-2px)}
+h2{color:#ffdf9a;letter-spacing:2px}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+.mode-card{
+ padding:20px;border:1px solid #9e8756;border-radius:18px;
+ background:linear-gradient(145deg,#263e35,#111d20);
+ text-align:left;
+}
+.mode-card h3{color:#ffdc91;text-align:center}
+.field{display:flex;flex-direction:column;gap:8px;margin:12px 0;color:#e9d8ae;font-size:13px}
+input,select{
+ width:100%;padding:12px;border:1px solid #8d8055;
+ border-radius:9px;background:#0c1918;color:white;
+}
+input:focus,select:focus{outline:1px solid #ffe09b}
+.choice-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.choice{
+ padding:11px 15px;border-radius:20px;border:1px solid #b38c4c;
+ background:#172a25;color:#fff0c7;
+}
+.choice.selected{background:#e9c475;color:#251707;font-weight:bold}
+.hidden{display:none!important}
+.note{font-size:12px;color:#b9c8ba;line-height:1.7;margin-top:12px}
+.game-page{display:none;min-height:100vh;padding:12px 6px 30px}
+.game-page.active{display:block}
+.header{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px}
+.header h1{color:#ffe6a3;font-size:clamp(25px,5vw,40px)}
+.small-btn{
+ padding:10px 15px;background:#19382b;color:#ffe5ad;
+ border:1px solid #c19b58;border-radius:9px;
+}
+.scoreboard{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:12px}
+.player-card{
+ min-width:180px;padding:12px 20px;border:2px solid #806d4a;
+ border-radius:15px;background:linear-gradient(145deg,#26352d,#111a1c);
+}
+.player-card.active{border-color:#ffe39b;box-shadow:0 0 22px #ffcf6677}
+.player-name{font-weight:bold;color:#fff0c7}
+.team-name{font-size:12px;color:#d8bc8d;margin:5px}
+.score{font-size:37px;color:#ffd276;text-shadow:0 0 15px #ffbb4a;font-weight:bold}
+#status{min-height:27px;color:#ffdc98;font-weight:bold;margin:10px}
+.target{color:#a6e9b8;font-size:13px;margin:8px}
+.game-wrap{width:min(1150px,99vw);margin:auto}
+canvas{display:block;width:100%;height:auto;border-radius:15px;touch-action:none;box-shadow:0 15px 40px #000c}
+.rules{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:12px}
+.ball-key{padding:7px 11px;border-radius:20px;background:#14251e;border:1px solid #ffffff30;font-size:12px}
+.help{color:#c2d1c6;font-size:13px;line-height:1.8;margin:15px auto;max-width:1050px}
+@media(max-width:650px){
+ .mode-grid{grid-template-columns:1fr}
+ .panel{padding:20px 14px}
+ .player-card{min-width:140px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- FIRST PAGE -->
+
+<section class="page active" id="page1">
+<div class="panel">
+ <div class="logo">A.SNOOKER</div>
+ <div class="tagline">THE ROYAL SNOOKER EXPERIENCE</div>
+
+ <div class="art">
+ <svg viewBox="0 0 900 340">
+ <defs>
+  <linearGradient id="wood" x2="0" y2="1">
+   <stop stop-color="#f3d28d"/>
+   <stop offset=".45" stop-color="#a16a37"/>
+   <stop offset="1" stop-color="#432315"/>
+  </linearGradient>
+  <linearGradient id="cloth" x2="1" y2="1">
+   <stop stop-color="#32a66b"/>
+   <stop offset="1" stop-color="#064329"/>
+  </linearGradient>
+  <radialGradient id="shine">
+   <stop stop-color="white"/>
+   <stop offset=".3" stop-color="#fff9"/>
+   <stop offset="1" stop-color="#000"/>
+  </radialGradient>
+ </defs>
+ <rect width="900" height="340" fill="#10191b"/>
+ <rect x="35" y="28" width="830" height="280" rx="25" fill="url(#wood)" stroke="#ffe5a4" stroke-width="4"/>
+ <rect x="67" y="58" width="766" height="220" rx="13" fill="url(#cloth)" stroke="#d4aa67" stroke-width="5"/>
+ <path d="M250 58V278 M250 108 A60 60 0 0 1 250 228" fill="none" stroke="#fff2ce" stroke-width="2"/>
+ <g fill="#050908">
+  <circle cx="68" cy="59" r="18"/><circle cx="450" cy="59" r="16"/><circle cx="832" cy="59" r="18"/>
+  <circle cx="68" cy="277" r="18"/><circle cx="450" cy="277" r="16"/><circle cx="832" cy="277" r="18"/>
+ </g>
+ <g stroke="#fff9" stroke-width="2">
+  <circle cx="390" cy="150" r="20" fill="#e72d3f"/>
+  <circle cx="435" cy="127" r="20" fill="#ffe34a"/>
+  <circle cx="435" cy="173" r="20" fill="#269dff"/>
+  <circle cx="480" cy="150" r="20" fill="#f5a4ce"/>
+  <circle cx="525" cy="127" r="20" fill="#202024"/>
+  <circle cx="525" cy="173" r="20" fill="#fff"/>
+ </g>
+ <path d="M720 315L280 100" stroke="#c28a48" stroke-width="11" stroke-linecap="round"/>
+ </svg>
+ </div>
+
+ <button class="gold-btn" id="goSetup">START GAME</button>
+</div>
+</section>
+
+<!-- SECOND PAGE -->
+
+<section class="page" id="page2">
+<div class="panel">
+ <div class="logo" style="font-size:48px">A.SNOOKER</div>
+ <h2>MATCH CONFIGURATION</h2>
+
+ <div class="mode-grid">
+
+  <div class="mode-card">
+   <h3>TEAM A - YOUR SIDE</h3>
+   <div class="choice-row">
+    <button class="choice selected" id="humanA">HUMAN</button>
+    <button class="choice" id="computerA">COMPUTER</button>
+   </div>
+   <div id="fieldsA">
+    <label class="field">PLAYER NAME
+     <input id="playerA" value="Player 1" maxlength="20">
+    </label>
+    <label class="field">TEAM NAME
+     <input id="teamA" value="Royal Strikers" maxlength="22">
+    </label>
+   </div>
+  </div>
+
+  <div class="mode-card">
+   <h3>TEAM B - OPPONENT</h3>
+   <div class="choice-row">
+    <button class="choice" id="humanB">HUMAN</button>
+    <button class="choice selected" id="computerB">COMPUTER</button>
+   </div>
+   <div id="fieldsB" class="hidden">
+    <label class="field">PLAYER NAME
+     <input id="playerB" value="Player 2" maxlength="20">
+    </label>
+    <label class="field">TEAM NAME
+     <input id="teamB" value="Crown Challengers" maxlength="22">
+    </label>
+   </div>
+  </div>
+
+ </div>
+
+ <div class="note">
+ Choose Human or Computer for both teams.<br>
+ Human vs Human, Human vs Computer and Computer vs Computer supported.
+ </div>
+ <button class="gold-btn" id="startMatch">START MATCH →</button>
+</div>
+</section>
+
+<!-- GAME PAGE -->
+
+<section class="game-page" id="page3">
+
+ <div class="header">
+  <h1>✦ A.SNOOKER ✦</h1>
+  <button class="small-btn" id="backSetup">← SETUP</button>
+  <button class="small-btn" id="newFrame">NEW FRAME</button>
+ </div>
+
+ <div class="scoreboard">
+  <div class="player-card active" id="card0">
+   <div class="player-name" id="name0">Player 1</div>
+   <div class="team-name" id="team0">Royal Strikers</div>
+   <div class="score" id="score0">0</div>
+  </div>
+  <div class="player-card" id="card1">
+   <div class="player-name" id="name1">Computer</div>
+   <div class="team-name" id="team1">Crown Challengers</div>
+   <div class="score" id="score1">0</div>
+  </div>
+ </div>
+
+ <div id="status">Ready</div>
+ <div class="target" id="target">BALL ON: RED</div>
+
+ <div class="rules">
+  <span class="ball-key">🔴 RED = 1</span>
+  <span class="ball-key">🟡 YELLOW = 2</span>
+  <span class="ball-key">🟢 GREEN = 3</span>
+  <span class="ball-key">🟤 BROWN = 4</span>
+  <span class="ball-key">🔵 BLUE = 5</span>
+  <span class="ball-key">🌸 PINK = 6</span>
+  <span class="ball-key">⚫ BLACK = 7</span>
+ </div>
+
+ <div class="game-wrap">
+  <canvas id="table" width="1100" height="620"></canvas>
+ </div>
+
+ <div class="help">
+  <b>HOW TO PLAY:</b> Ball ko hit karne ke liye table par press karo,
+  opposite direction mein drag karo aur release karo.<br>
+  <b>REAL SCORING:</b> Red, Colour, Red, Colour. Last red ke baad
+  Yellow, Green, Brown, Blue, Pink, Black.<br>
+  <b>FOUL:</b> Wrong first contact, cue ball pocket aur no contact
+  par opponent ko penalty points milte hain.<br>
+  <b>NOTE:</b> Computer opponent automatically shot play karega.
+ </div>
+</section>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+let side=["human","computer"];
+
+function chooseSide(n,type){
+ side[n]=type;
+ $("human"+(n?"B":"A")).classList.toggle("selected",type==="human");
+ $("computer"+(n?"B":"A")).classList.toggle("selected",type==="computer");
+ $("fields"+(n?"B":"A")).classList.toggle("hidden",type==="computer");
+}
+
+$("humanA").onclick=()=>chooseSide(0,"human");
+$("computerA").onclick=()=>chooseSide(0,"computer");
+$("humanB").onclick=()=>chooseSide(1,"human");
+$("computerB").onclick=()=>chooseSide(1,"computer");
+
+function showPage(id){
+ ["page1","page2","page3"].forEach(p=>$(p).classList.toggle("active",p===id));
+}
+$("goSetup").onclick=()=>showPage("page2");
+
+const canvas=$("table");
+const ctx=canvas.getContext("2d");
+
+const W=1100,H=620;
+const L=75,T=75,R=970,B=545,BR=11;
+const MAX_SPEED=2600,FRICTION=.989;
+
+const VALUE={
+ red:1,yellow:2,green:3,brown:4,
+ blue:5,pink:6,black:7
+};
+
+const COLORS={
+ red:"#e52c3c",yellow:"#ffdf35",
+ green:"#16d66b",brown:"#a5683e",
+ blue:"#278fff",pink:"#fa9bc8",
+ black:"#17171d",white:"#fffdf1"
+};
+
+const ORDER=["yellow","green","brown","blue","pink","black"];
+const POCKETS=[
+ [L,T],[522,T],[R,T],
+ [L,B],[522,B],[R,B]
+];
+
+let balls=[];
+let scores=[0,0];
+let names=["Player 1","Computer"];
+let teams=["Royal Strikers","Crown Challengers"];
+
+let turn=0,shot=null;
+let moving=false,thinking=false,gameOver=false;
+let dragging=false,dragStart=null,pointer=null,pull=0;
+let awaitingColor=false,clearance=false,clearIndex=0;
+let aiTimer=null,aiCue=null,lastFrame=0;
+
+const cue=()=>balls.find(b=>b.type==="white");
+const activeBalls=()=>balls.filter(b=>b.active);
+const reds=()=>balls.filter(b=>b.type==="red"&&b.active);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+
+function setStatus(s){$("status").textContent=s;}
+
+function targetName(){
+ if(clearance)return ORDER[clearIndex]||"finished";
+ return awaitingColor?"colour":"red";
+}
+function updateTarget(){
+ $("target").textContent="BALL ON: "+targetName().toUpperCase();
+}
+function createBall(type,x,y){
+ balls.push({type,x,y,vx:0,vy:0,active:true});
+}
+function stopAI(){
+ clearTimeout(aiTimer);
+ aiTimer=null;
+ aiCue=null;
+ thinking=false;
+}
+
+function updateScoreboard(){
+ for(let i=0;i<2;i++){
+  $("name"+i).textContent=names[i];
+  $("team"+i).textContent=teams[i];
+  $("score"+i).textContent=scores[i];
+  $("card"+i).classList.toggle("active",turn===i);
+ }
+ updateTarget();
+}
+
+function startMatch(){
+ names=[
+  side[0]==="computer"?"Computer A":$("playerA").value.trim()||"Player 1",
+  side[1]==="computer"?"Computer B":$("playerB").value.trim()||"Player 2"
+ ];
+ teams=[
+  side[0]==="computer"?"Computer Team":$("teamA").value.trim()||"Team A",
+  side[1]==="computer"?"Computer Team":$("teamB").value.trim()||"Team B"
+ ];
+ showPage("page3");
+ newFrame();
+}
+$("startMatch").onclick=startMatch;
+$("backSetup").onclick=()=>{stopAI();showPage("page2");};
+$("newFrame").onclick=newFrame;
+
+function newFrame(){
+ stopAI();
+ balls=[];
+ scores=[0,0];
+ turn=0;
+ shot=null;
+ moving=false;
+ gameOver=false;
+ dragging=false;
+ awaitingColor=false;
+ clearance=false;
+ clearIndex=0;
+
+ // Cue ball
+ createBall("white",210,310);
+
+ // Fifteen reds
+ const sx=730,sy=310;
+ for(let row=0;row<5;row++){
+  for(let col=0;col<=row;col++){
+   createBall("red",sx+row*19.2,sy+(col-row/2)*22.1);
+  }
+ }
+
+ // Colour spots
+ createBall("yellow",210,430);
+ createBall("green",210,190);
+ createBall("brown",270,310);
+ createBall("blue",522,310);
+ createBall("pink",705,310);
+ createBall("black",888,310);
+
+ updateScoreboard();
+ setStatus("Break-off. "+names[turn]+"'s turn.");
+ draw();
+}
+
+function allStopped(){
+ return activeBalls().every(b=>Math.hypot(b.vx,b.vy)<1.4);
+}
+
+function respot(b){
+ const spots={
+  yellow:[210,430],green:[210,190],
+  brown:[270,310],blue:[522,310],
+  pink:[705,310],black:[888,310]
+ };
+ const [sx,sy]=spots[b.type];
+ const positions=[[sx,sy]];
+
+ for(let r=16;r<145;r+=16){
+  for(let a=0;a<Math.PI*2;a+=Math.PI/8){
+   positions.push([sx+Math.cos(a)*r,sy+Math.sin(a)*r]);
+  }
+ }
+
+ for(const [x,y] of positions){
+  if(x<L+BR||x>R-BR||y<T+BR||y>B-BR)continue;
+  if(activeBalls().every(o=>o===b||Math.hypot(o.x-x,o.y-y)>BR*2+1)){
+   b.x=x;b.y=y;b.vx=0;b.vy=0;b.active=true;
+   return;
+  }
+ }
+ b.x=sx;b.y=sy;b.vx=0;b.vy=0;b.active=true;
+}
+
+function endFrame(){
+ gameOver=true;
+ stopAI();
+ let result=scores[0]===scores[1]?"Frame tied!":
+ names[scores[0]>scores[1]?0:1]+" WINS!";
+ setStatus("🏆 "+result+" FINAL SCORE: "+scores[0]+" - "+scores[1]);
+}
+
+function switchTurn(){
+ turn=1-turn;
+ updateScoreboard();
+}
+
+function ballValue(type){
+ return VALUE[type]||4;
+}
+
+/* STANDARD SNOOKER SCORING */
+
+function finishShot(){
+ if(!shot)return;
+
+ const result=shot;
+ shot=null;
+
+ const target=result.target;
+ const first=result.firstHit;
+ const potted=result.potted;
+
+ let foul=false;
+ let reason="";
+
+ if(result.scratch){
+  foul=true;
+  reason="Cue ball pocketed";
+ }else if(!first){
+  foul=true;
+  reason="No ball contact";
+ }else if(target==="red"&&first!=="red"){
+  foul=true;
+  reason="Wrong first ball";
+ }else if(target==="colour"&&(first==="red"||first==="white")){
+  foul=true;
+  reason="Wrong first ball";
+ }else if(!["red","colour","finished"].includes(target)&&first!==target){
+  foul=true;
+  reason="Wrong colour hit";
+ }
+
+ const valid=potted.filter(type=>{
+  if(type==="white")return false;
+  if(target==="red")return type==="red";
+  if(target==="colour")return type!=="red";
+  return type===target;
+ });
+
+ const invalid=potted.filter(type=>
+  type!=="white"&&!valid.includes(type)
+ );
+
+ if(invalid.length){
+  foul=true;
+  reason="Wrong ball potted";
+ }
+
+ if(foul){
+  const values=[
+   target==="red"?1:target==="colour"?4:ballValue(target),
+   first?ballValue(first):0,
+   ...potted.filter(x=>x!=="white").map(ballValue)
+  ];
+
+  const penalty=Math.min(7,Math.max(4,...values));
+  scores[1-turn]+=penalty;
+
+  // Colours return; reds stay pocketed.
+  for(const type of potted){
+   if(type!=="red"&&type!=="white"){
+    const b=balls.find(x=>x.type===type&&!x.active);
+    if(b)respot(b);
+   }
+  }
+
+  const white=cue();
+  if(white&&!white.active){
+   white.active=true;
+   white.x=210;white.y=310;
+   white.vx=0;white.vy=0;
+  }
+
+  switchTurn();
+  setStatus("FOUL: "+reason+". "+penalty+
+    " points to "+names[turn]+".");
+  updateScoreboard();
+  beginComputerTurn();
+  return;
+ }
+
+ const points=valid.reduce((sum,type)=>sum+ballValue(type),0);
+ scores[turn]+=points;
+
+ if(target==="red"){
+  if(valid.includes("red")){
+   awaitingColor=true;
+   setStatus(names[turn]+" scores 1. Next: ANY COLOUR.");
+  }else{
+   switchTurn();
+   setStatus("RED MISSED. "+names[turn]+"'s turn.");
+  }
+ }
+
+ else if(target==="colour"){
+  if(valid.length){
+   for(const type of valid){
+    const b=balls.find(x=>x.type===type&&!x.active);
+    if(b)respot(b);
+   }
+
+   if(reds().length===0){
+    clearance=true;
+    awaitingColor=false;
+    clearIndex=0;
+    setStatus("Clearance begins: YELLOW.");
+   }else{
+    awaitingColor=false;
+    setStatus(names[turn]+" scores "+points+". Next: RED.");
+   }
+  }else{
+   switchTurn();
+   setStatus("COLOUR MISSED. "+names[turn]+"'s turn.");
+  }
+ }
+
+ else{
+  if(valid.includes(target)){
+   clearIndex++;
+   if(clearIndex>=ORDER.length){
+    updateScoreboard();
+    endFrame();
+    return;
+   }
+   setStatus("Next colour: "+ORDER[clearIndex].toUpperCase());
+  }else{
+   switchTurn();
+   setStatus("MISSED. "+names[turn]+"'s turn.");
+  }
+ }
+
+ updateScoreboard();
+ beginComputerTurn();
+}
+
+/* PHYSICS ENGINE */
+
+function potBall(b){
+ b.active=false;
+ b.vx=0;b.vy=0;
+ if(shot){
+  shot.potted.push(b.type);
+  if(b.type==="white")shot.scratch=true;
+ }
+}
+
+function physicsStep(dt){
+ const friction=Math.pow(FRICTION,dt*60);
+
+ for(const b of activeBalls()){
+  b.x+=b.vx*dt;
+  b.y+=b.vy*dt;
+  b.vx*=friction;
+  b.vy*=friction;
+
+  if(Math.hypot(b.vx,b.vy)<3){
+   b.vx=0;b.vy=0;
+  }
+
+  if(POCKETS.some(p=>Math.hypot(b.x-p[0],b.y-p[1])<25)){
+   potBall(b);
+   continue;
+  }
+
+  if(b.x<L+BR){b.x=L+BR;b.vx=Math.abs(b.vx)*.91;}
+  if(b.x>R-BR){b.x=R-BR;b.vx=-Math.abs(b.vx)*.91;}
+  if(b.y<T+BR){b.y=T+BR;b.vy=Math.abs(b.vy)*.91;}
+  if(b.y>B-BR){b.y=B-BR;b.vy=-Math.abs(b.vy)*.91;}
+ }
+
+ const list=activeBalls();
+
+ for(let i=0;i<list.length;i++){
+  for(let j=i+1;j<list.length;j++){
+   const a=list[i],b=list[j];
+   const dx=b.x-a.x,dy=b.y-a.y;
+   const d=Math.hypot(dx,dy);
+
+   if(!d||d>=BR*2)continue;
+
+   // Record the first cue-ball contact.
+   if(shot&&!shot.firstHit){
+    if(a.type==="white")shot.firstHit=b.type;
+    else if(b.type==="white")shot.firstHit=a.type;
+   }
+
+   const nx=dx/d,ny=dy/d;
+   const overlap=BR*2-d;
+
+   a.x-=nx*overlap/2;
+   a.y-=ny*overlap/2;
+   b.x+=nx*overlap/2;
+   b.y+=ny*overlap/2;
+
+   const rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+
+   if(rel<0){
+    const impulse=-(1+.97)*rel/2;
+    a.vx-=impulse*nx;
+    a.vy-=impulse*ny;
+    b.vx+=impulse*nx;
+    b.vy+=impulse*ny;
+   }
+  }
+ }
+}
+
+function physics(dt){
+ const maxV=Math.max(0,...activeBalls().map(b=>Math.hypot(b.vx,b.vy)));
+ const steps=clamp(Math.ceil(maxV*dt/3.5),1,140);
+
+ for(let i=0;i<steps;i++)physicsStep(dt/steps);
+
+ if(shot&&allStopped())finishShot();
+}
+
+/* TABLE DESIGN */
+
+function rounded(x,y,w,h,r){
+ ctx.beginPath();
+ ctx.roundRect(x,y,w,h,r);
+}
+
+function drawTable(){
+ // Table shadow
+ ctx.fillStyle="#080d0b";
+ rounded(16,16,1068,588,28);
+ ctx.fill();
+
+ // Golden wooden frame
+ const wood=ctx.createLinearGradient(0,25,0,600);
+ wood.addColorStop(0,"#f8dfaa");
+ wood.addColorStop(.2,"#c58b49");
+ wood.addColorStop(.5,"#885024");
+ wood.addColorStop(1,"#3d2115");
+
+ ctx.fillStyle=wood;
+ rounded(34,34,1032,552,23);
+ ctx.fill();
+
+ ctx.strokeStyle="#ffe7ac";
+ ctx.lineWidth=3;
+ rounded(34,34,1032,552,23);
+ ctx.stroke();
+
+ // Green cloth
+ const cloth=ctx.createLinearGradient(L,T,R,B);
+ cloth.addColorStop(0,"#31a36b");
+ cloth.addColorStop(.5,"#0c693e");
+ cloth.addColorStop(1,"#064127");
+
+ ctx.fillStyle=cloth;
+ rounded(L,T,R-L,B-T,10);
+ ctx.fill();
+
+ // Cloth texture
+ ctx.strokeStyle="#ffffff09";
+ ctx.lineWidth=1;
+
+ for(let x=L+10;x<R;x+=25){
+  ctx.beginPath();
+  ctx.moveTo(x,T+8);
+  ctx.lineTo(x,B-8);
+  ctx.stroke();
+ }
+
+ // Baulk line and D
+ ctx.strokeStyle="#e9e1c5";
+ ctx.lineWidth=2;
+ ctx.beginPath();
+ ctx.moveTo(270,T);
+ ctx.lineTo(270,B);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.arc(270,310,77,Math.PI/2,Math.PI*1.5);
+ ctx.stroke();
+
+ // Spots
+ for(const [x,y] of [
+  [210,430],[210,190],[270,310],
+  [522,310],[705,310],[888,310]
+ ]){
+  ctx.beginPath();
+  ctx.arc(x,y,2.5,0,Math.PI*2);
+  ctx.fillStyle="#f6e6c7";
+  ctx.fill();
+ }
+
+ // Pockets
+ for(const [x,y] of POCKETS){
+  ctx.beginPath();
+  ctx.arc(x,y,25,0,Math.PI*2);
+
+  const g=ctx.createRadialGradient(x-5,y-5,2,x,y,25);
+  g.addColorStop(0,"#000");
+  g.addColorStop(1,"#090e0b");
+
+  ctx.fillStyle=g;
+  ctx.fill();
+  ctx.strokeStyle="#e3bc77";
+  ctx.lineWidth=3;
+  ctx.stroke();
+ }
+}
+
+function drawBall(b){
+ if(!b.active)return;
+
+ // Shadow
+ ctx.beginPath();
+ ctx.arc(b.x+3,b.y+4,BR,0,Math.PI*2);
+ ctx.fillStyle="#0009";
+ ctx.fill();
+
+ // Glossy 3D ball
+ const g=ctx.createRadialGradient(
+  b.x-4,b.y-5,1,b.x,b.y,BR
+ );
+
+ g.addColorStop(0,"#ffffff");
+ g.addColorStop(.17,"#ffffff");
+ g.addColorStop(.35,COLORS[b.type]);
+ g.addColorStop(.8,COLORS[b.type]);
+ g.addColorStop(1,"#111");
+
+ ctx.beginPath();
+ ctx.arc(b.x,b.y,BR,0,Math.PI*2);
+ ctx.fillStyle=g;
+ ctx.fill();
+
+ ctx.strokeStyle="#ffffffaa";
+ ctx.lineWidth=1;
+ ctx.stroke();
+
+ // Reflection
+ ctx.beginPath();
+ ctx.arc(b.x-4,b.y-5,2.7,0,Math.PI*2);
+ ctx.fillStyle="#ffffff";
+ ctx.fill();
+}
+
+function drawCue(ball,ux,uy,power){
+ const gap=BR+8+power*.55;
+
+ const tx=ball.x-ux*gap;
+ const ty=ball.y-uy*gap;
+ const bx=ball.x-ux*(gap+230);
+ const by=ball.y-uy*(gap+230);
+
+ ctx.save();
+ ctx.lineCap="round";
+
+ ctx.beginPath();
+ ctx.moveTo(tx+3,ty+3);
+ ctx.lineTo(bx+3,by+3);
+ ctx.strokeStyle="#000a";
+ ctx.lineWidth=12;
+ ctx.stroke();
+
+ const g=ctx.createLinearGradient(tx,ty,bx,by);
+ g.addColorStop(0,"#f8e8c3");
+ g.addColorStop(.25,"#e4b66f");
+ g.addColorStop(.7,"#9b5c2c");
+ g.addColorStop(1,"#49250f");
+
+ ctx.beginPath();
+ ctx.moveTo(tx,ty);
+ ctx.lineTo(bx,by);
+ ctx.strokeStyle=g;
+ ctx.lineWidth=8;
+ ctx.stroke();
+
+ ctx.restore();
+}
+
+function drawPower(power){
+ const x=1015,y=150,w=35,h=300;
+ ctx.fillStyle="#07150f";
+ ctx.fillRect(x,y,w,h);
+
+ ctx.strokeStyle="#ffe3a1";
+ ctx.lineWidth=2;
+ ctx.strokeRect(x,y,w,h);
+
+ const g=ctx.createLinearGradient(0,y+h,0,y);
+ g.addColorStop(0,"#1fc56a");
+ g.addColorStop(.5,"#e5cf32");
+ g.addColorStop(1,"#ee4939");
+
+ ctx.fillStyle=g;
+ ctx.fillRect(x+4,y+h-h*power/100,w-8,h*power/100);
+
+ ctx.fillStyle="#fff0bd";
+ ctx.font="bold 14px Arial";
+ ctx.textAlign="center";
+ ctx.fillText(Math.round(power)+"%",x+w/2,y+h+22);
+}
+
+function drawAim(){
+ if(dragging&&dragStart&&pointer&&cue()?.active){
+  const dx=dragStart.x-pointer.x;
+  const dy=dragStart.y-pointer.y;
+  const len=Math.hypot(dx,dy)||1;
+  const ux=dx/len,uy=dy/len;
+  const power=clamp(pull/180*100,0,100);
+
+  ctx.save();
+  ctx.setLineDash([8,7]);
+  ctx.strokeStyle="#ffffffdd";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(cue().x,cue().y);
+  ctx.lineTo(cue().x+ux*280,cue().y+uy*280);
+  ctx.stroke();
+  ctx.restore();
+
+  drawCue(cue(),ux,uy,power);
+  drawPower(power);
+
+ }else if(aiCue&&cue()?.active){
+  const progress=clamp(
+   (performance.now()-aiCue.started)/aiCue.duration,0,1
+  );
+  const power=aiCue.power*(.35+.65*Math.sin(progress*Math.PI/2));
+
+  drawCue(cue(),Math.cos(aiCue.angle),Math.sin(aiCue.angle),power);
+  drawPower(aiCue.power);
+ }
+}
+
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ drawTable();
+ balls.forEach(drawBall);
+ drawAim();
+}
+
+/* PLAYER INPUT */
+
+function pointerPos(e){
+ const r=canvas.getBoundingClientRect();
+ return {
+  x:(e.clientX-r.left)*W/r.width,
+  y:(e.clientY-r.top)*H/r.height
+ };
+}
+
+canvas.addEventListener("pointerdown",e=>{
+ if(gameOver||moving||thinking)return;
+ if(side[turn]==="computer")return;
+
+ const p=pointerPos(e);
+
+ if(p.x<L||p.x>R||p.y<T||p.y>B)return;
+ if(!cue()?.active)return;
+
+ dragging=true;
+ dragStart=p;
+ pointer=p;
+ pull=0;
+
+ canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener("pointermove",e=>{
+ if(!dragging)return;
+
+ pointer=pointerPos(e);
+ pull=clamp(
+  Math.hypot(pointer.x-dragStart.x,pointer.y-dragStart.y),
+  0,180
+ );
+
+ draw();
+});
+
+canvas.addEventListener("pointerup",()=>{
+ if(!dragging)return;
+
+ const dx=dragStart.x-pointer.x;
+ const dy=dragStart.y-pointer.y;
+ const len=Math.hypot(dx,dy)||1;
+ const speed=pull/180*MAX_SPEED;
+
+ if(speed>20){
+  shot={
+   potted:[],
+   scratch:false,
+   firstHit:null,
+   target:targetName()
+  };
+
+  cue().vx=dx/len*speed;
+  cue().vy=dy/len*speed;
+  moving=true;
+ }
+
+ dragging=false;
+ dragStart=null;
+ pointer=null;
+ pull=0;
+ draw();
+});
+
+canvas.addEventListener("pointercancel",()=>{
+ dragging=false;
+ dragStart=null;
+ pointer=null;
+ pull=0;
+ draw();
+});
+
+/* COMPUTER PLAYER */
+
+function beginComputerTurn(){
+ if(gameOver||side[turn]!=="computer")return;
+
+ thinking=true;
+ setStatus(names[turn]+" is thinking...");
+
+ const c=cue();
+ let targets=[];
+
+ if(clearance){
+  targets=activeBalls().filter(b=>b.type===ORDER[clearIndex]);
+ }else if(awaitingColor){
+  targets=activeBalls().filter(b=>
+   b.type!=="red"&&b.type!=="white"
+  );
+ }else{
+  targets=reds();
+ }
+
+ if(!targets.length){
+  thinking=false;
+  return;
+ }
+
+ targets.sort((a,b)=>dist(a,c)-dist(b,c));
+
+ const target=targets[0];
+ const angle=Math.atan2(target.y-c.y,target.x-c.x);
+ const power=65+Math.random()*12;
+ const speed=MAX_SPEED*power/100;
+
+ aiCue={
+  angle,power,started:performance.now(),duration:900
+ };
+
+ aiTimer=setTimeout(()=>{
+  if(gameOver||side[turn]!=="computer"){
+   stopAI();
+   return;
+  }
+
+  shot={
+   potted:[],
+   scratch:false,
+   firstHit:null,
+   target:targetName()
+  };
+
+  cue().vx=Math.cos(angle)*speed;
+  cue().vy=Math.sin(angle)*speed;
+
+  aiCue=null;
+  thinking=false;
+  moving=true;
+
+  setStatus(names[turn]+" is playing...");
+ },900);
+}
+
+/* GAME LOOP */
+
+function frame(time){
+ const dt=Math.min(.025,(time-lastFrame)/1000||.016);
+ lastFrame=time;
+
+ if(!allStopped()){
+  physics(dt);
+  moving=!allStopped();
+ }else{
+  moving=false;
+ }
+
+ if($("page3").classList.contains("active"))draw();
+
+ requestAnimationFrame(frame);
+}
+
+drawTable();
+requestAnimationFrame(frame);
+
+</script>
+</body>
+</html>

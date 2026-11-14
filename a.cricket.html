@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.CIRCKET</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: rgb(241, 241, 4);
+  background: #f70000f7;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 18px;
+  color: rgb(193, 199, 13);
+  font-weight: bold;
+  cursor: pointer;
+  background: #000000;
+  box-shadow: 0 0 12px #ff0101;
+  transition: .2s;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eefb02;
+  background: #517e88;
+  color: rgba(0, 0, 0, 0.991);
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* HOME PAGE */
+
+#home {
+  background:
+    radial-gradient(circle at center, #ffaa00, #01cef7 70%);
+}
+
+.center {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.logo {
+  font-size: clamp(48px, 10vw, 90px);
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: rgb(0, 0, 0);
+  text-shadow:
+    0 0 8px #ff0000,
+    0 0 25px #ffff00,
+    0 0 50px #ff0606;
+}
+
+.glow {
+  color: #f3f703;
+  text-shadow: 0 0 12px #fb0404;
+}
+
+.start-btn {
+  margin-top: 30px;
+  padding: 17px 55px;
+  font-size: 22px;
+  background: linear-gradient(90deg, hsl(0, 100%, 50%), #000000);
+  box-shadow: 0 0 15px #ff0202, 0 0 35px #fbff01;
+}
+
+/* SETUP PAGE */
+
+#setup {
+  background: linear-gradient(135deg, #d41b1be4, #22d8d5);
+}
+
+.setup-panel {
+  max-width: 1050px;
+  margin: 15px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: #6fae96;
+  border: 1px solid #000000;
+  box-shadow: 0 0 20px #ff0000;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #e6da08;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.team-box {
+  background: #000000;
+  border: 1px solid #ffff00;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.field {
+  margin: 12px 0;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #ede50c;
+}
+
+.player-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.player-list input {
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.small {
+  color: #ffe100;
+  font-size: 13px;
+}
+
+/* GAME PAGE - REAL STADIUM PHOTO */
+
+#game {
+  position: relative;
+  isolation: isolate;
+  padding: 12px;
+  background-image:
+    linear-gradient(
+      rgba(0, 10, 17, .58),
+      rgba(0, 10, 17, .72)
+    ),
+    url("adeel.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.game-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1150px;
+  margin: 8px auto;
+  padding: 16px;
+  border: 1px solid #000000;
+  border-radius: 18px;
+  background: rgba(96, 135, 136, 0);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 25px #ff0101;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.game-header h2 {
+  margin: 5px;
+  text-shadow: 0 0 10px #f6e201;
+}
+
+/* SCORE AREA */
+
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.team-card {
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.634);
+  border: 1px solid #f50000;
+}
+
+.team-card h3 {
+  margin: 5px 0;
+}
+
+.scoreboard {
+  max-width: 800px;
+  margin: 15px auto;
+  padding: 15px;
+  border-radius: 18px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.561);
+  border: 2px solid #000000;
+  box-shadow: 0 0 25px #ff0000;
+}
+
+.score {
+  font-size: clamp(42px, 8vw, 65px);
+  font-weight: 900;
+  color: rgb(254, 254, 254);
+  text-shadow: 0 0 15px #ffffff8b;
+}
+
+.ball-row {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin: 13px 0;
+}
+
+.ball {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #e80000;
+  background: #00000081;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.ball.filled {
+  background: #000000;
+  box-shadow: 0 0 10px #ff0000;
+}
+
+/* BAT IN THE MIDDLE */
+
+.bat-stage {
+  text-align: center;
+  margin: 14px auto 8px;
+  padding: 8px;
+}
+
+.bat-graphic {
+  width: 210px;
+  height: 245px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  border-radius: 14px;
+  filter: drop-shadow(0 0 18px #ff0000);
+}
+
+.bat-caption {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f6ff00;
+  text-shadow: 0 0 10px #ff0000;
+  margin-top: 5px;
+}
+
+/* THREE BUTTONS BELOW BAT */
+
+.mode-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.mode-btn {
+  min-width: 105px;
+  background: linear-gradient(135deg, #040cf3, #f60404);
+  border: 1px solid #f80505;
+}
+
+.mode-btn.selected {
+  background: linear-gradient(135deg, #0900ad, #b70808);
+  outline: 2px solid #ffffff;
+  box-shadow: 0 0 17px #ff0000;
+}
+
+.play-btn {
+  min-width: 190px;
+  padding: 15px 35px;
+  font-size: 21px;
+  background: linear-gradient(90deg, #f00f0f, #f0d9d9);
+  box-shadow: 0 0 18px #fd0101fc;
+}
+
+/* PLAYER LISTS */
+
+.roster-heading {
+  color: #ffea01;
+  text-align: center;
+  margin: 14px 0 6px;
+}
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.roster-player {
+  padding: 9px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.93);
+  border: 1px solid #fa0000;
+  font-size: 13px;
+}
+
+.roster-player.batting {
+  border: 2px solid #ee0707;
+  background: rgba(255, 242, 0, 0.95);
+  color: #0bdf1d;
+  box-shadow: 0 0 10px #ff0000;
+}
+
+.roster-player.out {
+  opacity: .35;
+  filter: grayscale(1);
+  text-decoration: line-through;
+}
+
+.roster-player.not-out {
+  border-color: #38ff06;
+}
+
+/* POPUP */
+
+.hidden {
+  display: none !important;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.849);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  z-index: 10;
+}
+
+.modal-card {
+  width: min(540px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #000000;
+  border: 2px solid #ff9900;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 25px #ff0101;
+}
+
+.modal-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.player-option {
+  text-align: left;
+  background: #000000;
+  border: 1px solid #ff0000;
+  padding: 11px;
+}
+
+.player-option.out,
+.player-option.unavailable {
+  opacity: .35;
+  filter: grayscale(1);
+  text-decoration: line-through;
+}
+
+.player-option.chosen {
+  background: #9f9929;
+  outline: 2px solid #fd0000;
+}
+
+.modal-note {
+  color: #fadd00;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+@media(max-width:650px) {
+  .team-grid,
+  .teams-row {
+    grid-template-columns: 1fr;
+  }
+
+  .player-list {
+    grid-template-columns: 1fr;
+  }
+
+  .screen {
+    padding: 10px;
+  }
+
+  .game-content {
+    padding: 10px;
+  }
+
+  .modal-options {
+    grid-template-columns: 1fr;
+  }
+
+  .bat-graphic {
+    width: 180px;
+    height: 210px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME PAGE -->
+
+<section id="home" class="screen active">
+  <div class="center">
+    <div class="logo">A.CIRCKET</div>
+    <p class="glow">THE ULTIMATE CRICKET GAME</p>
+    <button class="start-btn" onclick="showScreen('setup')">
+      START GAME
+    </button>
+  </div>
+</section>
+
+<!-- SETUP PAGE -->
+
+<section id="setup" class="screen">
+
+  <div class="setup-panel">
+
+    <h1>GAME SETTINGS</h1>
+
+    <div class="team-grid">
+
+      <div class="team-box">
+
+        <div class="field">
+          <label>Team Name</label>
+          <input
+            id="team1Name"
+            value="TEAM BLUE"
+            oninput="updateSetupNames()"
+          >
+        </div>
+
+        <h3 id="playersTitle1">TEAM BLUE PLAYERS</h3>
+        <div id="players1" class="player-list"></div>
+
+      </div>
+
+      <div class="team-box">
+
+        <div class="field">
+          <label>Team Name</label>
+          <input
+            id="team2Name"
+            value="TEAM RED"
+            oninput="updateSetupNames()"
+          >
+        </div>
+
+        <h3 id="playersTitle2">TEAM RED PLAYERS</h3>
+        <div id="players2" class="player-list"></div>
+
+      </div>
+
+    </div>
+
+    <div class="team-grid">
+
+      <div class="field">
+        <label>Overs</label>
+        <select id="overs">
+          <option value="2">2 Overs</option>
+          <option value="5" selected>5 Overs</option>
+          <option value="10">10 Overs</option>
+          <option value="20">20 Overs</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Who will bat first?</label>
+        <select id="firstBat">
+          <option value="0">TEAM BLUE</option>
+          <option value="1">TEAM RED</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="team-grid">
+
+      <div class="field">
+        <label>First team color</label>
+        <select id="color1">
+          <option value="#087fbd">Blue</option>
+          <option value="#159447">Green</option>
+          <option value="#b52e85">Pink</option>
+          <option value="#b47713">Orange</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Second team color</label>
+        <select id="color2">
+          <option value="#b52e35">Red</option>
+          <option value="#159447">Green</option>
+          <option value="#713cc1">Purple</option>
+          <option value="#b47713">Orange</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button onclick="showScreen('home')">BACK</button>
+      <button onclick="startMatch()">START MATCH</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- GAME PAGE -->
+
+<section id="game" class="screen">
+
+  <div class="game-content">
+
+    <div class="game-header">
+      <button onclick="exitGame()">EXIT</button>
+      <h2>A.CIRCKET</h2>
+      <div id="inningsLabel" class="glow">INNINGS 1</div>
+    </div>
+
+    <!-- TEAM SCORE PANELS -->
+
+    <div class="teams-row">
+
+      <div class="team-card">
+        <h3 id="batTeamName">BATTING TEAM</h3>
+        <div id="batTeamScore">0 / 0</div>
+        <div class="small" id="batTeamOvers">0.0 overs</div>
+      </div>
+
+      <div class="team-card">
+        <h3 id="bowlTeamName">BOWLING TEAM</h3>
+        <div id="bowlerName">Bowler: -</div>
+        <div class="small" id="bowlerInfo">Ready</div>
+      </div>
+
+    </div>
+
+    <!-- SCOREBOARD -->
+
+    <div class="scoreboard">
+
+      <div class="glow" id="inningsTitle">FIRST INNINGS</div>
+
+      <div class="score" id="mainScore">0 / 0</div>
+
+      <div id="oversText">Overs: 0.0</div>
+
+      <div id="targetText" class="glow">First innings</div>
+
+      <div id="lastResult" class="result">
+        Match ready!
+      </div>
+
+      <div class="ball-row" id="ballRow">
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+      </div>
+
+      <div class="small" id="batterText">Batters: -</div>
+
+    </div>
+
+    <!-- NEW PURPLE SS MASTER BAT PHOTO -->
+
+    <div class="bat-stage">
+
+      <img
+        class="bat-graphic"
+        src="C:\Users\Digital\OneDrive\Desktop\ADEEL GAMES\cricket.png"
+        alt="Purple SS Master cricket bat, red ball and three wickets"
+      >
+
+      <div class="bat-caption">A.CIRCKET</div>
+
+    </div>
+
+    <!-- THREE BUTTONS BELOW BAT -->
+
+    <h3>SELECT YOUR MODE</h3>
+
+    <div class="mode-row">
+
+      <button class="mode-btn selected"
+              data-mode="SLOW"
+              onclick="chooseMode(this)">
+        SLOW
+      </button>
+
+      <button class="mode-btn"
+              data-mode="BALANCE"
+              onclick="chooseMode(this)">
+        BALANCE
+      </button>
+
+      <button class="mode-btn"
+              data-mode="POWER"
+              onclick="chooseMode(this)">
+        POWER
+      </button>
+
+    </div>
+
+    <!-- BAT BUTTON -->
+
+    <div class="actions">
+
+      <button
+        id="actionButton"
+        class="play-btn"
+        onclick="playBall()">
+        BAT
+      </button>
+
+      <button
+        id="targetButton"
+        onclick="setTarget()">
+        SET TARGET
+      </button>
+
+    </div>
+
+    <p class="small" style="text-align:center">
+      Select a mode and press BAT to play.
+    </p>
+
+    <!-- COMPLETE BATTER LIST -->
+
+    <h3 class="roster-heading">BATTING TEAM PLAYERS</h3>
+    <div id="batRoster" class="roster"></div>
+
+    <!-- COMPLETE BOWLER LIST -->
+
+    <h3 class="roster-heading">BOWLING TEAM PLAYERS</h3>
+    <div id="bowlRoster" class="roster"></div>
+
+  </div>
+</section>
+
+<!-- PLAYER SELECTION POPUP -->
+
+<div id="modal" class="modal hidden">
+
+  <div class="modal-card">
+
+    <h2 id="modalTitle">SELECT PLAYER</h2>
+
+    <p id="modalMessage" class="small"></p>
+
+    <div id="modalOptions" class="modal-options"></div>
+
+    <div class="actions">
+      <button
+        id="modalButton"
+        onclick="confirmModal()"
+        disabled>
+        CONFIRM
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+/* VARIABLES */
+
+const $ = id => document.getElementById(id);
+
+let teams = [];
+let innings = null;
+
+let inningsNumber = 1;
+let maxOvers = 5;
+
+let firstInningsScore = 0;
+let firstInningsTeam = 0;
+
+let target = null;
+
+let selectedMode = "SLOW";
+
+let pendingAction = "";
+let selectedModalValue = null;
+
+let lastBowler = -1;
+let previousBowler = -1;
+
+let ballHistory = [];
+let matchOver = false;
+let pendingNewOver = false;
+
+/* PAGE NAVIGATION */
+
+function showScreen(id) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  $(id).classList.add("active");
+}
+
+/* CREATE PLAYER INPUTS */
+
+function createPlayerInputs() {
+
+  for (let t = 1; t <= 2; t++) {
+
+    let container = $("players" + t);
+    container.innerHTML = "";
+
+    for (let i = 1; i <= 11; i++) {
+
+      let input = document.createElement("input");
+
+      input.value = "Player " + i;
+      input.id = "t" + t + "p" + i;
+      input.placeholder = "Player " + i;
+
+      container.appendChild(input);
+    }
+  }
+}
+
+createPlayerInputs();
+
+/* UPDATE TEAM NAMES */
+
+function updateSetupNames() {
+
+  let name1 = $("team1Name").value.trim() || "TEAM A";
+  let name2 = $("team2Name").value.trim() || "TEAM B";
+
+  $("playersTitle1").textContent = name1 + " PLAYERS";
+  $("playersTitle2").textContent = name2 + " PLAYERS";
+
+  $("firstBat").options[0].text = name1;
+  $("firstBat").options[1].text = name2;
+}
+
+/* READ TEAM DETAILS */
+
+function readTeam(t) {
+
+  let players = [];
+
+  for (let i = 1; i <= 11; i++) {
+
+    let value = $("t" + t + "p" + i).value.trim();
+
+    players.push(value || "Player " + i);
+  }
+
+  return {
+    name: $("team" + t + "Name").value.trim() || "TEAM " + t,
+    players: players,
+    color: $("color" + t).value
+  };
+}
+
+/* START MATCH */
+
+function startMatch() {
+
+  teams = [
+    readTeam(1),
+    readTeam(2)
+  ];
+
+  maxOvers = Number($("overs").value);
+
+  inningsNumber = 1;
+  firstInningsScore = 0;
+
+  firstInningsTeam = Number($("firstBat").value);
+
+  target = null;
+  matchOver = false;
+
+  $("actionButton").disabled = false;
+  $("targetButton").disabled = false;
+
+  startInnings(firstInningsTeam);
+
+  showScreen("game");
+}
+
+/* START INNINGS */
+
+function startInnings(battingTeam) {
+
+  innings = {
+
+    batting: battingTeam,
+    bowling: 1 - battingTeam,
+
+    score: 0,
+    wickets: 0,
+    balls: 0,
+
+    striker: 0,
+    nonStriker: 1,
+
+    out: Array(11).fill(false),
+
+    batStats: Array.from({length: 11}, () => ({
+      runs: 0,
+      balls: 0
+    })),
+
+    bowlStats: Array.from({length: 11}, () => ({
+      balls: 0,
+      runs: 0,
+      wickets: 0
+    }))
+  };
+
+  lastBowler = -1;
+  previousBowler = -1;
+
+  ballHistory = [];
+  pendingNewOver = false;
+
+  selectedMode = "SLOW";
+  updateModeButtons();
+
+  $("actionButton").textContent = "BAT";
+  $("actionButton").style.background = teams[battingTeam].color;
+
+  $("targetButton").classList.toggle(
+    "hidden",
+    inningsNumber !== 2
+  );
+
+  $("inningsLabel").textContent = "INNINGS " + inningsNumber;
+
+  $("inningsTitle").textContent =
+    inningsNumber === 1
+      ? "FIRST INNINGS"
+      : "SECOND INNINGS";
+
+  $("lastResult").textContent = "Select the first bowler.";
+
+  updateDisplay();
+
+  openBowlerSelection(true);
+}
+
+/* MODE BUTTONS */
+
+function updateModeButtons() {
+
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+
+    btn.classList.toggle(
+      "selected",
+      btn.dataset.mode === selectedMode
+    );
+  });
+}
+
+function chooseMode(btn) {
+
+  if (matchOver) return;
+
+  selectedMode = btn.dataset.mode;
+
+  updateModeButtons();
+}
+
+/* OVERS DISPLAY */
+
+function oversString(balls) {
+
+  return Math.floor(balls / 6) + "." + (balls % 6);
+}
+
+/* UPDATE ALL DISPLAY */
+
+function updateDisplay() {
+
+  if (!innings) return;
+
+  let batTeam = teams[innings.batting];
+  let bowlTeam = teams[innings.bowling];
+
+  $("batTeamName").textContent = batTeam.name;
+  $("bowlTeamName").textContent = bowlTeam.name;
+
+  $("batTeamScore").textContent =
+    innings.score + " / " + innings.wickets;
+
+  $("batTeamOvers").textContent =
+    oversString(innings.balls) + " overs";
+
+  $("mainScore").textContent =
+    innings.score + " / " + innings.wickets;
+
+  $("oversText").textContent =
+    "Overs: " + oversString(innings.balls);
+
+  if (inningsNumber === 2) {
+
+    $("targetText").textContent =
+      target === null
+        ? "Target: Not set"
+        : "Target: " + target;
+
+  } else {
+
+    $("targetText").textContent = "First innings";
+  }
+
+  let strikerName =
+    innings.striker >= 0
+      ? batTeam.players[innings.striker]
+      : "Waiting for new batter";
+
+  let nonStrikerName =
+    innings.nonStriker >= 0
+      ? batTeam.players[innings.nonStriker]
+      : "-";
+
+  let strikerStats =
+    innings.striker >= 0
+      ? innings.batStats[innings.striker]
+      : null;
+
+  let nonStrikerStats =
+    innings.nonStriker >= 0
+      ? innings.batStats[innings.nonStriker]
+      : null;
+
+  $("batterText").textContent =
+    "🏏 " + strikerName +
+    (strikerStats
+      ? " (" + strikerStats.runs + " runs, " +
+        strikerStats.balls + " balls)"
+      : "") +
+    "  |  " + nonStrikerName +
+    (nonStrikerStats
+      ? " (" + nonStrikerStats.runs + " runs)"
+      : "");
+
+  if (lastBowler >= 0) {
+
+    $("bowlerName").textContent =
+      "Bowler: " + bowlTeam.players[lastBowler];
+
+    let stats = innings.bowlStats[lastBowler];
+
+    $("bowlerInfo").textContent =
+      oversString(stats.balls) + " overs | " +
+      stats.runs + " runs | " +
+      stats.wickets + " wickets";
+
+  } else {
+
+    $("bowlerName").textContent = "Bowler: Select";
+    $("bowlerInfo").textContent = "Waiting for bowler";
+  }
+
+  /* BALL INDICATORS */
+
+  let row = $("ballRow");
+  row.innerHTML = "";
+
+  for (let i = 0; i < 6; i++) {
+
+    let ball = document.createElement("div");
+
+    ball.className =
+      "ball" + (i < ballHistory.length ? " filled" : "");
+
+    ball.textContent = ballHistory[i] ?? "";
+
+    row.appendChild(ball);
+  }
+
+  renderBattingRoster();
+  renderBowlingRoster();
+}
+
+/* BATTER ROSTER */
+
+function renderBattingRoster() {
+
+  let container = $("batRoster");
+  container.innerHTML = "";
+
+  innings.batStats.forEach((stats, index) => {
+
+    let item = document.createElement("div");
+
+    item.className = "roster-player";
+
+    let name = teams[innings.batting].players[index];
+
+    if (innings.out[index]) {
+
+      item.classList.add("out");
+      item.textContent = name + " - OUT";
+
+    } else {
+
+      item.classList.add("not-out");
+
+      if (index === innings.striker) {
+
+        item.classList.add("batting");
+        item.textContent = "🏏 " + name + " *";
+
+      } else if (index === innings.nonStriker) {
+
+        item.textContent = name + " (Not out)";
+
+      } else {
+
+        item.textContent = name + " (Not out)";
+      }
+    }
+
+    item.title =
+      stats.runs + " runs, " + stats.balls + " balls";
+
+    container.appendChild(item);
+  });
+}
+
+/* BOWLER ROSTER */
+
+function renderBowlingRoster() {
+
+  let container = $("bowlRoster");
+  container.innerHTML = "";
+
+  innings.bowlStats.forEach((stats, index) => {
+
+    let item = document.createElement("div");
+
+    item.className = "roster-player";
+
+    let name = teams[innings.bowling].players[index];
+
+    item.textContent =
+      name + " - " + oversString(stats.balls) + " overs";
+
+    if (stats.balls >= 30) {
+
+      item.classList.add("out");
+      item.textContent += " (5 OVER LIMIT)";
+
+    } else if (index === lastBowler) {
+
+      item.classList.add("batting");
+      item.textContent += " (CURRENT)";
+    }
+
+    container.appendChild(item);
+  });
+}
+
+/* POPUP SYSTEM */
+
+function openModal(title, message, options, action) {
+
+  $("modalTitle").textContent = title;
+  $("modalMessage").textContent = message;
+
+  let container = $("modalOptions");
+  container.innerHTML = "";
+
+  selectedModalValue = null;
+  pendingAction = action;
+
+  options.forEach(option => {
+
+    let button = document.createElement("button");
+
+    button.className = "player-option";
+    button.textContent = option.label;
+    button.disabled = !!option.disabled;
+
+    if (option.disabled) {
+
+      button.classList.add(
+        option.out ? "out" : "unavailable"
+      );
+    }
+
+    if (option.note) {
+
+      let note = document.createElement("div");
+
+      note.className = "modal-note";
+      note.textContent = option.note;
+
+      button.appendChild(note);
+    }
+
+    button.onclick = () => {
+
+      if (button.disabled) return;
+
+      container.querySelectorAll("button").forEach(b => {
+        b.classList.remove("chosen");
+      });
+
+      button.classList.add("chosen");
+
+      selectedModalValue = option.value;
+
+      $("modalButton").disabled = false;
+    };
+
+    container.appendChild(button);
+  });
+
+  $("modalButton").disabled = true;
+
+  $("modal").classList.remove("hidden");
+}
+
+function closeModal() {
+
+  $("modal").classList.add("hidden");
+}
+
+/* CONFIRM PLAYER */
+
+function confirmModal() {
+
+  if (selectedModalValue === null) return;
+
+  let value = selectedModalValue;
+  let action = pendingAction;
+
+  closeModal();
+
+  if (action === "bowler") {
+
+    lastBowler = value;
+
+    updateDisplay();
+
+    $("lastResult").textContent =
+      teams[innings.bowling].players[value] +
+      " selected as bowler!";
+
+  } else if (action === "batter") {
+
+    innings.striker = value;
+
+    updateDisplay();
+
+    $("lastResult").textContent =
+      "🏏 " + teams[innings.batting].players[value] +
+      " is now batting!";
+
+    if (pendingNewOver) {
+
+      pendingNewOver = false;
+
+      openBowlerSelection(false);
+    }
+  }
+}
+
+/* SELECT BOWLER */
+
+function openBowlerSelection(firstOver = false) {
+
+  let bowlTeam = teams[innings.bowling];
+
+  let options = [];
+
+  bowlTeam.players.forEach((name, index) => {
+
+    let stats = innings.bowlStats[index];
+
+    let exhausted = stats.balls >= 30;
+    let previous = index === previousBowler;
+
+    let disabled = exhausted || previous;
+
+    let note = "";
+
+    if (exhausted) {
+
+      note = "Maximum 5 overs completed";
+
+    } else if (previous) {
+
+      note = "Cannot bowl consecutive overs";
+
+    } else {
+
+      note = oversString(stats.balls) + " overs bowled";
+    }
+
+    options.push({
+      value: index,
+      label: name,
+      disabled: disabled,
+      note: note
+    });
+  });
+
+  let available = options.filter(option => !option.disabled);
+
+  if (available.length === 0) {
+
+    finishInnings();
+    return;
+  }
+
+  openModal(
+    firstOver ? "SELECT FIRST BOWLER" : "SELECT NEW BOWLER",
+    "Choose any available bowler. One bowler can bowl a maximum of 5 overs and cannot bowl consecutive overs.",
+    options,
+    "bowler"
+  );
+}
+
+/* SELECT BATTER */
+
+function openBatterSelection() {
+
+  let batTeam = teams[innings.batting];
+
+  let options = [];
+
+  batTeam.players.forEach((name, index) => {
+
+    let isOut = innings.out[index];
+
+    let alreadyPlaying =
+      index === innings.striker ||
+      index === innings.nonStriker;
+
+    let disabled = isOut || alreadyPlaying;
+
+    let note = "";
+
+    if (isOut) {
+
+      note = "OUT - Cannot bat again";
+
+    } else if (alreadyPlaying) {
+
+      note = "Already playing";
+
+    } else {
+
+      note = "Available";
+    }
+
+    options.push({
+      value: index,
+      label: name,
+      disabled: disabled,
+      out: isOut,
+      note: note
+    });
+  });
+
+  let available = options.filter(option => !option.disabled);
+
+  if (available.length === 0) {
+
+    finishInnings();
+    return;
+  }
+
+  openModal(
+    "SELECT NEXT BATTER",
+    "The complete player list is shown. Choose any available player. An out player cannot bat again.",
+    options,
+    "batter"
+  );
+}
+
+/* CHANGE STRIKE */
+
+function swapStrike() {
+
+  let temp = innings.striker;
+
+  innings.striker = innings.nonStriker;
+  innings.nonStriker = temp;
+}
+
+/* RANDOM BALL RESULT */
+
+function randomOutcome() {
+
+  let r = Math.random();
+
+  if (selectedMode === "SLOW") {
+
+    if (r < 0.06) return "W";
+    if (r < 0.43) return 0;
+    if (r < 0.73) return 1;
+    if (r < 0.87) return 2;
+    if (r < 0.96) return 4;
+
+    return 6;
+  }
+
+  if (selectedMode === "BALANCE") {
+
+    if (r < 0.09) return "W";
+    if (r < 0.25) return 0;
+    if (r < 0.52) return 1;
+    if (r < 0.68) return 2;
+    if (r < 0.87) return 4;
+
+    return 6;
+  }
+
+  if (r < 0.17) return "W";
+  if (r < 0.28) return 0;
+  if (r < 0.42) return 1;
+  if (r < 0.54) return 2;
+  if (r < 0.76) return 4;
+
+  return 6;
+}
+
+/* PLAY BALL */
+
+function playBall() {
+
+  if (matchOver || !innings) return;
+
+  if (lastBowler < 0) {
+
+    openBowlerSelection(true);
+    return;
+  }
+
+  if (innings.striker < 0) {
+
+    openBatterSelection();
+    return;
+  }
+
+  let outcome = randomOutcome();
+
+  let batStats = innings.batStats[innings.striker];
+  let bowlStats = innings.bowlStats[lastBowler];
+
+  innings.balls++;
+
+  batStats.balls++;
+  bowlStats.balls++;
+
+  let wicketThisBall = outcome === "W";
+
+  if (wicketThisBall) {
+
+    innings.wickets++;
+
+    bowlStats.wickets++;
+
+    innings.out[innings.striker] = true;
+
+    ballHistory.push("W");
+
+    $("lastResult").textContent =
+      "WICKET! " +
+      teams[innings.batting].players[innings.striker] +
+      " IS OUT!";
+
+    innings.striker = -1;
+
+  } else {
+
+    innings.score += outcome;
+
+    batStats.runs += outcome;
+    bowlStats.runs += outcome;
+
+    ballHistory.push(String(outcome));
+
+    if (outcome === 0) {
+
+      $("lastResult").textContent = "DOT BALL!";
+
+    } else if (outcome === 4) {
+
+      $("lastResult").textContent = "FOUR!";
+
+    } else if (outcome === 6) {
+
+      $("lastResult").textContent = "SIX!";
+
+    } else {
+
+      $("lastResult").textContent = outcome + " RUN";
+    }
+
+    if (outcome % 2 === 1) {
+
+      swapStrike();
+    }
+  }
+
+  let overComplete = innings.balls % 6 === 0;
+
+  /* CHECK TARGET */
+
+  if (
+    inningsNumber === 2 &&
+    target !== null &&
+    innings.score >= target
+  ) {
+
+    updateDisplay();
+    finishMatch(true);
+    return;
+  }
+
+  /* CHECK ALL OUT OR OVERS FINISHED */
+
+  if (
+    innings.wickets >= 10 ||
+    innings.balls >= maxOvers * 6
+  ) {
+
+    updateDisplay();
+    finishInnings();
+    return;
+  }
+
+  /* OVER COMPLETE */
+
+  if (overComplete) {
+
+    if (!wicketThisBall) {
+
+      swapStrike();
+    }
+
+    ballHistory = [];
+
+    previousBowler = lastBowler;
+    lastBowler = -1;
+
+    if (wicketThisBall) {
+
+      pendingNewOver = true;
+    }
+  }
+
+  updateDisplay();
+
+  /* WICKET */
+
+  if (wicketThisBall) {
+
+    openBatterSelection();
+    return;
+  }
+
+  /* NEW OVER */
+
+  if (overComplete) {
+
+    $("lastResult").textContent += " OVER COMPLETE!";
+
+    openBowlerSelection(false);
+  }
+}
+
+/* OPTIONAL TARGET */
+
+function setTarget() {
+
+  if (inningsNumber !== 2 || matchOver) return;
+
+  let suggested = firstInningsScore + 1;
+
+  let answer = prompt(
+    "Enter target score for the second innings:",
+    suggested
+  );
+
+  if (answer === null) return;
+
+  let value = Number(answer);
+
+  if (!Number.isInteger(value) || value < 1) {
+
+    alert("Please enter a valid positive target.");
+    return;
+  }
+
+  target = value;
+
+  updateDisplay();
+
+  if (innings.score >= target) {
+
+    finishMatch(true);
+
+  } else {
+
+    $("lastResult").textContent =
+      "Target set to " + target + " runs!";
+  }
+}
+
+/* END INNINGS */
+
+function finishInnings() {
+
+  if (inningsNumber === 1) {
+
+    firstInningsScore = innings.score;
+    firstInningsTeam = innings.batting;
+
+    let firstTeamName = teams[firstInningsTeam].name;
+
+    alert(
+      "FIRST INNINGS COMPLETE!\n\n" +
+      firstTeamName + " scored " +
+      firstInningsScore + " runs."
+    );
+
+    inningsNumber = 2;
+    target = null;
+
+    startInnings(1 - firstInningsTeam);
+
+    return;
+  }
+
+  finishMatch(false);
+}
+
+/* MATCH RESULT */
+
+function finishMatch(chased) {
+
+  matchOver = true;
+
+  let secondInningsScore = innings.score;
+  let secondInningsTeam = innings.batting;
+
+  let scores = [0, 0];
+
+  scores[firstInningsTeam] = firstInningsScore;
+  scores[secondInningsTeam] = secondInningsScore;
+
+  let winner = "";
+
+  if (chased) {
+
+    winner = teams[secondInningsTeam].name;
+
+  } else if (target !== null) {
+
+    if (secondInningsScore >= target) {
+
+      winner = teams[secondInningsTeam].name;
+
+    } else {
+
+      winner = teams[firstInningsTeam].name;
+    }
+
+  } else {
+
+    if (scores[0] > scores[1]) {
+
+      winner = teams[0].name;
+
+    } else if (scores[1] > scores[0]) {
+
+      winner = teams[1].name;
+
+    } else {
+
+      winner = "TIED";
+    }
+  }
+
+  let resultMessage =
+    winner === "TIED"
+      ? "MATCH TIED!"
+      : winner + " WON THE MATCH!";
+
+  $("lastResult").textContent = resultMessage;
+
+  $("actionButton").disabled = true;
+  $("actionButton").textContent = "MATCH OVER";
+
+  $("targetButton").disabled = true;
+
+  $("targetText").textContent = "MATCH FINISHED";
+
+  updateDisplay();
+
+  setTimeout(() => {
+
+    alert(
+      resultMessage +
+      "\n\n" +
+      teams[0].name + ": " + scores[0] + " runs" +
+      "\n" +
+      teams[1].name + ": " + scores[1] + " runs"
+    );
+
+  }, 150);
+}
+
+/* EXIT GAME */
+
+function exitGame() {
+
+  if (confirm("Are you sure you want to exit this match?")) {
+
+    matchOver = true;
+
+    $("actionButton").disabled = false;
+    $("targetButton").disabled = false;
+
+    showScreen("home");
+  }
+}
+
+</script>
+
+</body>
+</html>
